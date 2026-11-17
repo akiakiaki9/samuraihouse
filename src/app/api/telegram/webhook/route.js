@@ -4,6 +4,10 @@ import { orderMenuCategories } from '@/data/menu-category-order';
 import { getOrder, updateOrderStatus } from '@/lib/orderStore';
 import { answerCallback, editMessage, sendMessage } from '@/lib/telegram';
 
+export async function GET() {
+    return NextResponse.json({ ok: true, service: 'telegram-webhook' });
+}
+
 export async function POST(request) {
     let update;
     try {
