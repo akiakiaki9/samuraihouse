@@ -4,6 +4,9 @@ import { orderMenuCategories } from '@/data/menu-category-order';
 import { getOrder, updateOrderStatus } from '@/lib/orderStore';
 import { answerCallback, editMessage, sendMessage } from '@/lib/telegram';
 
+const ALL_CATEGORIES_BUTTON = '📚 Все категории';
+const CATEGORY_BUTTON_PREFIX = '← Назад к категории: ';
+
 export async function GET() {
     return NextResponse.json({ ok: true, service: 'telegram-webhook' });
 }
@@ -19,15 +22,30 @@ export async function POST(request) {
     // --- Обработка текстовых сообщений (автоответчик) ---
     if (update.message) {
         const chatId = update.message.chat.id;
-        const text = update.message.text || '';
+        const text = (update.message.text || '').trim();
+        const command = text.split(/\s+/, 1)[0].split('@', 1)[0];
 
-        // На любое сообщение (или /start, /menu) показываем категории
-        const keyboard = buildCategoriesKeyboard();
-        await sendMessage(
-            chatId,
-            '🍣 <b>SAMURAI HOUSE</b>\n\nВыберите категорию меню:',
-            keyboard
-        );
+        if (command === '/start' || command === '/menu' || text === ALL_CATEGORIES_BUTTON) {
+            await sendCategoryList(chatId);
+            return NextResponse.json({ ok: true });
+        }
+
+        const backCategoryName = text.startsWith(CATEGORY_BUTTON_PREFIX)
+            ? text.slice(CATEGORY_BUTTON_PREFIX.length)
+            : null;
+        const category = categories.find((item) => item.name === (backCategoryName || text));
+        if (category) {
+            await sendCategoryMenu(chatId, category);
+            return NextResponse.json({ ok: true });
+        }
+
+        const dish = dishes.find((item) => getDishButtonLabel(item) === text);
+        if (dish) {
+            await sendDishDetails(chatId, dish);
+            return NextResponse.json({ ok: true });
+        }
+
+        await sendCategoryList(chatId);
         return NextResponse.json({ ok: true });
     }
 
@@ -136,7 +154,7 @@ export async function POST(request) {
             chatId,
             messageId,
             '🍣 <b>SAMURAI HOUSE</b>\n\nВыберите категорию меню:',
-            buildCategoriesKeyboard()
+            buildInlineCategoriesKeyboard()
         );
         await answerCallback(cq.id);
         return NextResponse.json({ ok: true });
@@ -146,15 +164,105 @@ export async function POST(request) {
     return NextResponse.json({ ok: true });
 }
 
-function buildCategoriesKeyboard() {
-    // 17 категорий → 4 строки по 4-5 кнопок, чтобы влезло
+async function sendCategoryList(chatId) {
+    await sendMessage(
+        chatId,
+        '🍣 <b>SAMURAI HOUSE</b>\n\nВыберите категорию меню:',
+        buildCategoriesReplyKeyboard()
+    );
+}
+
+async function sendCategoryMenu(chatId, category) {
+    const categoryDishes = dishes.filter((dish) => dish.categoryId === category.id);
+    if (categoryDishes.length === 0) {
+        await sendMessage(chatId, 'Категория пуста', buildCategoriesReplyKeyboard());
+        return;
+    }
+
+    const shown = categoryDishes.slice(0, 10);
+    const text = [
+        `📂 <b>${category.name}</b>`,
+        '',
+        `Найдено блюд: ${categoryDishes.length}`,
+        shown.length < categoryDishes.length ? `(показаны первые ${shown.length})` : '',
+    ].filter(Boolean).join('\n');
+
+    await sendMessage(chatId, text, buildCategoryReplyKeyboard(shown));
+}
+
+async function sendDishDetails(chatId, dish) {
+    const category = categories.find((item) => item.id === dish.categoryId);
+    const text = [
+        `<b>${dish.name}</b>`,
+        '',
+        dish.description || '',
+        '',
+        `💰 <b>Цена:</b> ${formatPrice(dish.price) || 'уточняется'}`,
+        dish.weight ? `⚖️ <b>Вес:</b> ${dish.weight}` : '',
+    ].filter(Boolean).join('\n');
+
+    await sendMessage(chatId, text, buildDishNavigationKeyboard(category));
+}
+
+function buildCategoriesReplyKeyboard() {
+    const orderedCategories = orderMenuCategories(categories);
+    const rows = [];
+    for (let i = 0; i < orderedCategories.length; i += 2) {
+        rows.push(
+            orderedCategories.slice(i, i + 2).map(({ name }) => ({ text: name }))
+        );
+    }
+    return buildReplyKeyboard(rows);
+}
+
+function buildCategoryReplyKeyboard(categoryDishes) {
+    const rows = [];
+    for (let i = 0; i < categoryDishes.length; i += 2) {
+        rows.push(
+            categoryDishes.slice(i, i + 2).map((dish) => ({ text: getDishButtonLabel(dish) }))
+        );
+    }
+    rows.push([{ text: ALL_CATEGORIES_BUTTON }]);
+    return buildReplyKeyboard(rows);
+}
+
+function buildDishNavigationKeyboard(category) {
+    return buildReplyKeyboard([
+        [{ text: `${CATEGORY_BUTTON_PREFIX}${category.name}` }],
+        [{ text: ALL_CATEGORIES_BUTTON }],
+    ]);
+}
+
+function buildReplyKeyboard(keyboard) {
+    return {
+        keyboard,
+        resize_keyboard: true,
+        is_persistent: true,
+    };
+}
+
+function getDishButtonLabel(dish) {
+    const baseLabel = `${dish.name} — ${
+        Number.isFinite(dish.price) ? formatPrice(dish.price) : 'цена уточняется'
+    }`;
+    const matchingDishes = dishes.filter((item) => (
+        `${item.name} — ${
+            Number.isFinite(item.price) ? formatPrice(item.price) : 'цена уточняется'
+        }` === baseLabel
+    ));
+
+    if (matchingDishes.length < 2) return baseLabel;
+    return `${baseLabel} (${matchingDishes.findIndex((item) => item.id === dish.id) + 1})`;
+}
+
+function buildInlineCategoriesKeyboard() {
     const rows = [];
     const orderedCategories = orderMenuCategories(categories);
     for (let i = 0; i < orderedCategories.length; i += 4) {
         rows.push(
-            orderedCategories.slice(i, i + 4).map((c) => ({
-                text: c.name,
-                callback_data: `cat:${c.id}`,
+            orderedCategories.slice(i, i + 4).map((category) => ({
+                text: category.name,
+                callback_data: `cat:${category.id}`,
             }))
         );
     }

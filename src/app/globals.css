@@ -2225,14 +2225,16 @@ a.contact-card:hover {
 
 .order-form__radios {
   display: flex;
+  flex-direction: column;
   gap: 8px;
 }
 
 .order-form__radio {
-  flex: 1;
+  flex: none;
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
   padding: 12px 14px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-strong);
