@@ -22,7 +22,7 @@ export default function DishImage({
             sizes={sizes}
             priority={priority}
             onError={() => setErrored(true)}
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: 'contain' }}
         />
     );
 }

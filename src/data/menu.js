@@ -1,5 +1,5 @@
 // Каталог блюд перенесён из предоставленного меню SAMURAI HOUSE.
-// Фотографии пока не назначены; позиции без цены не добавляются в корзину.
+// Блюда без цены остаются недоступны для заказа.
 
 export const categories = [
     { id: 'tea', name: 'Чай' },
@@ -31,10 +31,10 @@ const menuRows = [
     ['lemonade', 'mojito-strawberry-large', 'Мохито клубничный', 35400],
     ['lemonade', 'mojito-orange', 'Мохито апельсиновый', 17500],
     ['lemonade', 'mojito-passion-fruit-small', 'Мохито Маракуйя', 17500],
+    ['lemonade', 'mojito-passion-fruit-large', 'Мохито Маракуйя', 35400],
     ['lemonade', 'mojito-orange-large', 'Мохито Апельсиновый', 35400],
     ['lemonade', 'mojito-blue-curacao', 'Мохито Блю Кюрасао', 17500],
     ['lemonade', 'mojito-strawberry', 'Мохито клубничный', 17500],
-    ['lemonade', 'mojito-passion-fruit-large', 'Мохито Маракуйя', 35400],
     ['lemonade', 'mojito-passion-fruit-large-2', 'Мохито Маракуйя', 35400],
 
     ['salads', 'shrimp-passion-fruit-salad', 'С креветками соусом маракуйя', 68000, '180 г'],
@@ -187,13 +187,41 @@ const menuRows = [
     ['sashimi', 'sashimi-tuna', 'Сашими тунец', 30600, '80 г'],
 ];
 
+const suppliedPhotoIds = new Set([
+    'alaska-roll', 'american-roll', 'arugula-shrimp-salad', 'baked-california-roll', 'baked-chicken-roll', 'baked-philadelphia',
+    'baked-salmon-roll', 'baked-salmon-roll-2', 'baked-shrimp-roll', 'barbecue-pizza', 'bbq-chicken-wings', 'beef-ramen',
+    'beijing-eggplant', 'black-tea', 'bonito-eel-roll', 'bonito-salmon-roll', 'bonito-spice-roll', 'caesar-chicken-salad',
+    'caesar-pizza', 'caesar-shrimp-salad', 'california-crab-roll', 'california-salmon-roll', 'california-set', 'california-shrimp-roll',
+    'cheese-balls', 'cheese-sticks', 'chicken-cheese-cutlets', 'chicken-eskimo', 'chicken-firecracker', 'chicken-hot-dog-roll',
+    'chicken-kachudian-rice', 'chicken-mushrooms-rice', 'chicken-pizza', 'chicken-set', 'chocolate-sweet-roll', 'classic-set',
+    'country-potatoes', 'creamy-eel-roll', 'creamy-salmon-roll', 'creamy-salmon-spice-roll', 'crispy-roll', 'dragon-set',
+    'dynamite-baked-roll', 'ebi-hot-spice-roll', 'emperor-roll', 'emperor-salmon-roll', 'emperor-set', 'emperor-shrimp-roll',
+    'four-cheese-pizza', 'four-seasons-pizza', 'french-fries', 'fume-pizza', 'garlic-croutons', 'geisha-baked-roll',
+    'greek-salad', 'green-alaska-roll', 'green-tea', 'hawaii-chef-roll', 'hot-california-roll', 'hot-philadelphia-roll',
+    'julienne-pizza', 'margherita-pizza', 'mashed-potatoes', 'mexican-pizza', 'mini-avocado-roll', 'mini-cucumber-roll',
+    'mini-eel-roll', 'mini-salmon-roll', 'mini-set', 'mini-shrimp-roll', 'mojito-blue-curacao', 'mojito-blue-curacao-large',
+    'mojito-mango', 'mojito-orange', 'mojito-orange-large', 'mojito-passion-fruit-large', 'mojito-passion-fruit-large-2', 'mojito-passion-fruit-small',
+    'mojito-strawberry', 'mojito-strawberry-large', 'mushroom-cream-soup', 'n1-double-beef-wok', 'n10-beef-buckwheat', 'n11-chicken-wok',
+    'n12-beef-rice-wok', 'n2-beef-wok', 'n3-buckwheat-seafood', 'n4-chicken-udon', 'n5-beef-udon', 'n6-seafood-wok',
+    'n7-salmon-udon', 'n8-chicken-udon', 'n9-chicken-buckwheat', 'pepperoni-pizza', 'philadelphia', 'philadelphia-classic-roll',
+    'philadelphia-crab-roll', 'philadelphia-giant-roll', 'philadelphia-green-onion', 'philadelphia-shrimp', 'pho-bo', 'poke-eel',
+    'poke-salmon', 'poke-shrimp', 'poke-tuna', 'potato-beef-mushrooms', 'premium-dragon-roll', 'premium-hong-kong-roll',
+    'premium-salmon-roll', 'premium-set', 'premium-shrimp-roll', 'premium-tuna-roll', 'red-dragon-roll', 'royal-roll',
+    'salmon-hot-dog-roll', 'salmon-set', 'salmon-steak', 'samurai-chef-baked-roll', 'samurai-eggplant-salad', 'samurai-roll',
+    'samurai-set', 'sashimi-eel', 'sashimi-salmon', 'sashimi-shrimp', 'sashimi-tuna', 'shrimp-fettuccine',
+    'shrimp-firecracker', 'shrimp-hot-dog-roll', 'shrimp-kachudian', 'shrimp-passion-fruit-salad', 'shrimp-tempura-8', 'spaghetti-carbonara',
+    'special-tea', 'squid-salad', 'surimi-shrimp-roll', 'sweet-sour-chicken', 'tender-sweet-roll', 'teriyaki-vegetables-rice',
+    'tobikiri-roll', 'tom-yum-fettuccine', 'tom-yum-roll', 'tom-yum-soup', 'unagi-cheese-roll', 'unagi-uramaki',
+    'wasabi-shrimp', 'yasai-roll',
+]);
+
 export const dishes = menuRows.map(([categoryId, id, name, price, weight = null]) => ({
     id,
     categoryId,
     name,
     price,
     weight,
-    image: null,
+    image: `/images/menu/${id}.${suppliedPhotoIds.has(id) ? 'jpg' : 'webp'}`,
 }));
 
 export function getDishById(id) {

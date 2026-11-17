@@ -3,8 +3,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import DishImage from './ui/DishImage';
 import { dishes, categories } from '@/data/menu';
+import { orderMenuCategories } from '@/data/menu-category-order';
 import { formatPrice, formatWeight } from '@/lib/format';
 import { useCart } from './CartProvider';
+
+const orderedCategories = orderMenuCategories(categories);
 
 export default function MenuClient() {
     const [query, setQuery] = useState('');
@@ -134,7 +137,7 @@ export default function MenuClient() {
                     >
                         Всё меню
                     </button>
-                    {categories.map((cat) => {
+                    {orderedCategories.map((cat) => {
                         const count = dishes.filter((d) => d.categoryId === cat.id).length;
                         if (count === 0) return null;
                         return (

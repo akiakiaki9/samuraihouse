@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import { categories } from '@/data/menu';
+import { orderMenuCategories } from '@/data/menu-category-order';
 
 export default function MenuCategories() {
+    const orderedCategories = orderMenuCategories(categories);
+
     return (
         <section className="section categories">
             <div className="container">
@@ -13,7 +16,7 @@ export default function MenuCategories() {
                 </div>
 
                 <ul className="categories__grid">
-                    {categories.map((cat, i) => (
+                    {orderedCategories.map((cat, i) => (
                         <li key={cat.id}>
                             <Link
                                 href={`/menu#${cat.id}`}

@@ -1,9 +1,10 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { createPortal } from 'react-dom';
 import Logo from './Logo';
 import { site } from '@/config/site';
 import { useCart } from './CartProvider';
@@ -15,11 +16,20 @@ const NAV_LINKS = [
     { href: '/#contacts', label: 'Контакты' },
 ];
 
+const subscribeToClient = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
 export default function Header() {
     const pathname = usePathname();
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { open: openCart, totalCount, isHydrated } = useCart();
+    const isPortalReady = useSyncExternalStore(
+        subscribeToClient,
+        getClientSnapshot,
+        getServerSnapshot
+    );
 
     useEffect(() => {
         if (!isMenuOpen) return;
@@ -51,7 +61,8 @@ export default function Header() {
     if (pathname === '/links') return null;
 
     return (
-        <header className={`header${pathname === '/menu' ? ' header--menu-page' : ''}`}>
+        <>
+        <header className={`header${pathname === '/menu' ? ' header--menu-page' : ''}${isMenuOpen ? ' is-menu-open' : ''}`}>
             <div className="container header__inner">
                 <Logo />
 
@@ -105,44 +116,67 @@ export default function Header() {
                 </div>
             </div>
 
-            <div
-                id="mobile-menu"
-                className={`mobile-menu ${isMenuOpen ? 'is-open' : ''}`}
-                aria-hidden={!isMenuOpen}
-            >
-                <nav aria-label="Мобильная навигация">
-                    <ul className="mobile-menu__list">
-                        {NAV_LINKS.map((link) => (
-                            <li key={link.href}>
-                                <Link
-                                    href={link.href}
-                                    className="mobile-menu__link"
-                                    onClick={closeMenu}
-                                >
-                                    {link.label}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
-
-                <div className="mobile-menu__footer">
-                    <a href={site.phoneHref} className="mobile-menu__phone">
-                        {site.phone}
-                    </a>
-                    <p className="mobile-menu__hours">{site.hours.label}</p>
-                </div>
-            </div>
-
-            {isMenuOpen && (
-                <button
-                    type="button"
-                    className="mobile-menu__backdrop"
-                    aria-label="Закрыть меню"
-                    onClick={closeMenu}
-                />
-            )}
         </header>
+        {!isMenuOpen && (
+            <button
+                type="button"
+                className="floating-cart"
+                aria-label="Быстро открыть корзину"
+                onClick={handleCartClick}
+            >
+                <CartIcon />
+                <span>Корзина</span>
+                {showBadge && (
+                    <span className="floating-cart__badge">
+                        {totalCount > 99 ? '99+' : totalCount}
+                    </span>
+                )}
+            </button>
+        )}
+        {isPortalReady && createPortal(
+            <>
+                <div
+                    id="mobile-menu"
+                    className={`mobile-menu ${isMenuOpen ? 'is-open' : ''}`}
+                    aria-hidden={!isMenuOpen}
+                    inert={!isMenuOpen}
+                >
+                    <nav aria-label="Мобильная навигация">
+                        <ul className="mobile-menu__list">
+                            {NAV_LINKS.map((link) => (
+                                <li key={link.href}>
+                                    <Link
+                                        href={link.href}
+                                        className="mobile-menu__link"
+                                        onClick={closeMenu}
+                                    >
+                                        {link.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+
+                    <div className="mobile-menu__footer">
+                        <a href={site.phoneHref} className="mobile-menu__phone">
+                            {site.phone}
+                        </a>
+                        <p className="mobile-menu__hours">{site.hours.label}</p>
+                    </div>
+                </div>
+
+                {isMenuOpen && (
+                    <button
+                        type="button"
+                        className="mobile-menu__backdrop"
+                        aria-label="Закрыть меню"
+                        onClick={closeMenu}
+                    />
+                )}
+            </>,
+            document.body
+        )}
+        </>
     );
 }
 

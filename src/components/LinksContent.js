@@ -66,82 +66,47 @@ export default function LinksContent({ site }) {
 
       <div className="sh-links__wrap">
         <header className="sh-links-brand">
-          <div className="sh-links-brand__logo"><Logo size={88} withText={false} /></div>
-          <span className="sh-links-brand__eyebrow">JAPANESE • ASIAN CUISINE • BUKHARA</span>
+          <div className="sh-links-brand__logo"><Logo size={60} withText={false} /></div>
           <h1>SAMURAI <span>HOUSE</span></h1>
-          <p>{site.tagline}</p>
-          <div className="sh-links-brand__status"><i /> Ежедневно · 11:00–02:00</div>
+          <p>Японская и азиатская кухня · Бухара</p>
         </header>
 
-        <section className="sh-links-feature">
-          <div className="sh-links-feature__copy">
-            <span className="sh-links-kicker">TASTE THE EAST</span>
-            <h2>ТВОЙ ВЕЧЕР.<br /><em>ТВОЙ SAMURAI.</em></h2>
-            <p>Роллы, суши и блюда азиатской кухни — выбирайте любимое и наслаждайтесь вкусом.</p>
-            <Link href="/menu" className="sh-links-feature__button">Смотреть меню <Icon name="arrow" /></Link>
-          </div>
-          <div className="sh-links-feature__art" aria-hidden="true">
-            <span className="sh-links-feature__kanji">侍</span>
-            <span className="sh-links-feature__seal">SAMURAI<br />HOUSE</span>
-            <span className="sh-links-feature__ring" />
-          </div>
-        </section>
+        <nav className="sh-links-actions" aria-label="Ссылки ресторана">
+          <ActionLink href="/menu" icon="menu" primary>Открыть меню</ActionLink>
+          <ActionLink href={site.social.instagram} icon="instagram" external>Instagram</ActionLink>
+          <ActionLink href={site.mapsUrl} icon="pin" external>Построить маршрут</ActionLink>
+          <ActionLink href={site.phoneHref} icon="phone">Позвонить: {site.phone}</ActionLink>
+        </nav>
 
-        <section className="sh-links-section">
-          <div className="sh-links-section__heading">
-            <span className="sh-links-kicker">QUICK ACCESS</span>
-            <h2>МЫ НА СВЯЗИ</h2>
-          </div>
-          <article className="sh-links-detail sh-links-detail--wifi sh-links-wifi--quick">
-            <div className="sh-links-wifi__heading">
-              <span className="sh-links-detail__icon"><Icon name="wifi" /></span>
-              <span className="sh-links-detail__label">WI-FI ДЛЯ ГОСТЕЙ</span>
-            </div>
-            <div className="sh-links-wifi__credentials">
-              <div className="sh-links-wifi__row"><span>Сеть</span><strong>{site.wifi.ssid}</strong></div>
-              <div className="sh-links-wifi__row"><span>Пароль</span><strong>{site.wifi.password}</strong></div>
-            </div>
+        <details className="sh-links-disclosure">
+          <summary><Icon name="wifi" /><span>Wi-Fi для гостей</span><b>+</b></summary>
+          <div className="sh-links-disclosure__body">
+            <div className="sh-links-wifi__row"><span>Сеть</span><strong>{site.wifi.ssid}</strong></div>
+            <div className="sh-links-wifi__row"><span>Пароль</span><strong>{site.wifi.password}</strong></div>
             <button type="button" onClick={copyWifiPassword} className="sh-links-copy">
               <Icon name={copied ? "check" : "copy"} />
               {copied ? "Скопировано" : "Скопировать пароль"}
             </button>
-          </article>
-          <nav className="sh-links-actions" aria-label="Ссылки ресторана">
-            <ActionLink href="/menu" icon="menu" primary>Открыть меню</ActionLink>
-            <ActionLink href={site.social.instagram} icon="instagram" external>Instagram</ActionLink>
-            <ActionLink href={site.mapsUrl} icon="pin" external>Построить маршрут</ActionLink>
-            <ActionLink href={site.phoneHref} icon="phone">Позвонить: {site.phone}</ActionLink>
-          </nav>
-        </section>
+          </div>
+        </details>
 
-        <section className="sh-links-details">
-          <div className="sh-links-section__heading">
-            <span className="sh-links-kicker">GOOD TO KNOW</span>
-            <h2>ИНФОРМАЦИЯ</h2>
+        <details className="sh-links-disclosure">
+          <summary><Icon name="clock" /><span>Адрес и график работы</span><b>+</b></summary>
+          <div className="sh-links-disclosure__body">
+            <strong>{site.address.full}</strong>
+            <span>{site.hours.label}</span>
+            <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">
+              Открыть на карте <Icon name="arrow" />
+            </a>
           </div>
-          <div className="sh-links-detail-grid">
-            <article className="sh-links-detail">
-              <span className="sh-links-detail__icon"><Icon name="clock" /></span>
-              <span className="sh-links-detail__label">ГРАФИК РАБОТЫ</span>
-              <strong>{site.hours.label}</strong>
-              <small>Работаем для вас каждый день</small>
-            </article>
-            <article className="sh-links-detail">
-              <span className="sh-links-detail__icon"><Icon name="pin" /></span>
-              <span className="sh-links-detail__label">НАШ АДРЕС</span>
-              <strong>{site.address.full}</strong>
-              <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">Открыть на карте <Icon name="arrow" /></a>
-            </article>
-          </div>
-        </section>
+        </details>
 
         <footer className="sh-links-footer">
-          <div className="sh-links-footer__mark">侍</div>
-          <strong>SAMURAI HOUSE</strong>
-          <span>ЯПОНСКАЯ И АЗИАТСКАЯ КУХНЯ · БУХАРА</span>
-          <span className="sh-links-footer__credit">Разработано в <a href="https://www.akbarsoft.uz/" target="_blank" rel="noopener noreferrer">Akbar Soft</a></span>
-          <Link href="/">← Вернуться на главный сайт</Link>
-          <small>© {year && `${year} `}SAMURAI HOUSE. ALL RIGHTS RESERVED.</small>
+          <small>© {year && `${year} `}SAMURAI HOUSE</small>
+          <Link href="/">На главный сайт</Link>
+          <span className="sh-links-footer__credit">
+            Разработано в <a href="https://www.akbarsoft.uz/" target="_blank" rel="noopener noreferrer">Akbar Soft</a>
+          </span>
         </footer>
       </div>
     </div>

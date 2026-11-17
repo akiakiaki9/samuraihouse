@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { categories, dishes } from '@/data/menu';
+import { orderMenuCategories } from '@/data/menu-category-order';
 import { getOrder, updateOrderStatus } from '@/lib/orderStore';
 import { answerCallback, editMessage, sendMessage } from '@/lib/telegram';
 
@@ -144,9 +145,10 @@ export async function POST(request) {
 function buildCategoriesKeyboard() {
     // 17 категорий → 4 строки по 4-5 кнопок, чтобы влезло
     const rows = [];
-    for (let i = 0; i < categories.length; i += 4) {
+    const orderedCategories = orderMenuCategories(categories);
+    for (let i = 0; i < orderedCategories.length; i += 4) {
         rows.push(
-            categories.slice(i, i + 4).map((c) => ({
+            orderedCategories.slice(i, i + 4).map((c) => ({
                 text: c.name,
                 callback_data: `cat:${c.id}`,
             }))

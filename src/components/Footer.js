@@ -93,7 +93,6 @@ export default function Footer() {
                         <a href="https://www.akbarsoft.uz/" target="_blank" rel="noopener noreferrer">
                             Akbar Soft
                         </a>{' '}
-                        (<a href="https://www.akbarsoft.uz/" target="_blank" rel="noopener noreferrer">www.akbarsoft.uz</a>)
                     </span>
                 </p>
             </div>
