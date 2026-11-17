@@ -113,3 +113,27 @@ export async function sendMessage(chatId, text, replyMarkup) {
     body: JSON.stringify(body),
   }).catch(() => { });
 }
+
+export async function sendPhoto(chatId, photo, caption, replyMarkup) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  if (!token) return false;
+
+  const body = {
+    chat_id: chatId,
+    photo,
+    caption,
+    parse_mode: 'HTML',
+    reply_markup: replyMarkup,
+  };
+  const res = await fetch(`${TELEGRAM_API}/bot${token}/sendPhoto`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const result = await res.json();
+  if (!res.ok || !result.ok) {
+    console.error('[telegram] sendPhoto failed:', result.description || res.status);
+    return false;
+  }
+  return true;
+}
