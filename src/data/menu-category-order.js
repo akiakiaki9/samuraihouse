@@ -2,6 +2,7 @@ const CATEGORY_PRIORITY = [
     'cold-rolls',
     'baked-rolls',
     'hot-rolls',
+    'business-lunch',
     'sets',
     'poke',
     'pizza',

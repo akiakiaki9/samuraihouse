@@ -19,6 +19,7 @@ export const categories = [
     { id: 'sweet-rolls', name: 'Сладкие роллы' },
     { id: 'poke', name: 'Поке' },
     { id: 'sashimi', name: 'Сашими' },
+    { id: 'business-lunch', name: 'Бизнес-ланч' },
 ];
 
 const menuRows = [
@@ -185,44 +186,87 @@ const menuRows = [
     ['sashimi', 'sashimi-eel', 'Сашими угорь', 32725, '85 г'],
     ['sashimi', 'sashimi-salmon', 'Сашими лосось', 30600, '80 г'],
     ['sashimi', 'sashimi-tuna', 'Сашими тунец', 30600, '80 г'],
+
+    [
+        'business-lunch', 'business-lunch-1', 'Бизнес-ланч №1', null, null,
+        'Том Ям, Филадельфия (4 шт.), Цезарь с курицей, вишнёвый морс.',
+    ],
+    [
+        'business-lunch', 'business-lunch-2', 'Бизнес-ланч №2', null, null,
+        'Поке с угрём, суп Фо-бо, мини-ролл с огурцом, вишнёвый морс.',
+    ],
+    [
+        'business-lunch', 'business-lunch-3', 'Бизнес-ланч №3', null, null,
+        'Спагетти Карбонара, баклажан по-пекински, сладкий ролл «Нежный» (4 шт.), вишнёвый морс.',
+    ],
+    [
+        'business-lunch', 'business-lunch-4', 'Бизнес-ланч №4', null, null,
+        'Рамен с говядиной, Цезарь с курицей, мини-ролл с авокадо, вишнёвый морс.',
+    ],
 ];
 
 const suppliedPhotoIds = new Set([
-    'alaska-roll', 'american-roll', 'arugula-shrimp-salad', 'baked-california-roll', 'baked-chicken-roll', 'baked-philadelphia',
-    'baked-salmon-roll', 'baked-salmon-roll-2', 'baked-shrimp-roll', 'barbecue-pizza', 'bbq-chicken-wings', 'beef-ramen',
-    'beijing-eggplant', 'black-tea', 'bonito-eel-roll', 'bonito-salmon-roll', 'bonito-spice-roll', 'caesar-chicken-salad',
-    'caesar-pizza', 'caesar-shrimp-salad', 'california-crab-roll', 'california-salmon-roll', 'california-set', 'california-shrimp-roll',
-    'cheese-balls', 'cheese-sticks', 'chicken-cheese-cutlets', 'chicken-eskimo', 'chicken-firecracker', 'chicken-hot-dog-roll',
+    'alaska-roll', 'american-roll', 'arugula-shrimp-salad', 'barbecue-pizza', 'bbq-chicken-wings', 'beef-ramen',
+    'beijing-eggplant', 'business-lunch-1', 'business-lunch-2', 'business-lunch-3', 'business-lunch-4',
+    'black-tea', 'bonito-eel-roll', 'bonito-salmon-roll', 'bonito-spice-roll', 'caesar-chicken-salad',
+    'caesar-pizza', 'caesar-shrimp-salad', 'california-crab-roll', 'california-salmon-roll', 'california-set',
+    'cheese-balls', 'cheese-sticks', 'chicken-cheese-cutlets', 'chicken-eskimo', 'chicken-firecracker',
     'chicken-kachudian-rice', 'chicken-mushrooms-rice', 'chicken-pizza', 'chicken-set', 'chocolate-sweet-roll', 'classic-set',
     'country-potatoes', 'creamy-eel-roll', 'creamy-salmon-roll', 'creamy-salmon-spice-roll', 'crispy-roll', 'dragon-set',
-    'dynamite-baked-roll', 'ebi-hot-spice-roll', 'emperor-roll', 'emperor-salmon-roll', 'emperor-set', 'emperor-shrimp-roll',
+    'ebi-hot-spice-roll', 'emperor-roll', 'emperor-salmon-roll', 'emperor-set', 'emperor-shrimp-roll',
     'four-cheese-pizza', 'four-seasons-pizza', 'french-fries', 'fume-pizza', 'garlic-croutons', 'geisha-baked-roll',
-    'greek-salad', 'green-alaska-roll', 'green-tea', 'hawaii-chef-roll', 'hot-california-roll', 'hot-philadelphia-roll',
+    'greek-salad', 'green-alaska-roll', 'green-tea', 'hot-california-roll', 'hot-philadelphia-roll',
     'julienne-pizza', 'margherita-pizza', 'mashed-potatoes', 'mexican-pizza', 'mini-avocado-roll', 'mini-cucumber-roll',
     'mini-eel-roll', 'mini-salmon-roll', 'mini-set', 'mini-shrimp-roll', 'mojito-blue-curacao', 'mojito-blue-curacao-large',
     'mojito-mango', 'mojito-orange', 'mojito-orange-large', 'mojito-passion-fruit-large', 'mojito-passion-fruit-large-2', 'mojito-passion-fruit-small',
     'mojito-strawberry', 'mojito-strawberry-large', 'mushroom-cream-soup', 'n1-double-beef-wok', 'n10-beef-buckwheat', 'n11-chicken-wok',
-    'n12-beef-rice-wok', 'n2-beef-wok', 'n3-buckwheat-seafood', 'n4-chicken-udon', 'n5-beef-udon', 'n6-seafood-wok',
+    'n12-beef-rice-wok', 'n3-buckwheat-seafood', 'n4-chicken-udon', 'n5-beef-udon', 'n6-seafood-wok',
     'n7-salmon-udon', 'n8-chicken-udon', 'n9-chicken-buckwheat', 'pepperoni-pizza', 'philadelphia', 'philadelphia-classic-roll',
     'philadelphia-crab-roll', 'philadelphia-giant-roll', 'philadelphia-green-onion', 'philadelphia-shrimp', 'pho-bo', 'poke-eel',
     'poke-salmon', 'poke-shrimp', 'poke-tuna', 'potato-beef-mushrooms', 'premium-dragon-roll', 'premium-hong-kong-roll',
-    'premium-salmon-roll', 'premium-set', 'premium-shrimp-roll', 'premium-tuna-roll', 'red-dragon-roll', 'royal-roll',
-    'salmon-hot-dog-roll', 'salmon-set', 'salmon-steak', 'samurai-chef-baked-roll', 'samurai-eggplant-salad', 'samurai-roll',
-    'samurai-set', 'sashimi-eel', 'sashimi-salmon', 'sashimi-shrimp', 'sashimi-tuna', 'shrimp-fettuccine',
-    'shrimp-firecracker', 'shrimp-hot-dog-roll', 'shrimp-kachudian', 'shrimp-passion-fruit-salad', 'shrimp-tempura-8', 'spaghetti-carbonara',
+    'premium-salmon-roll', 'premium-shrimp-roll', 'royal-roll',
+    'salmon-set', 'salmon-steak', 'samurai-eggplant-salad', 'samurai-roll',
+    'sashimi-eel', 'sashimi-salmon', 'sashimi-shrimp', 'sashimi-tuna', 'shrimp-fettuccine',
+    'shrimp-firecracker', 'shrimp-kachudian', 'shrimp-passion-fruit-salad', 'shrimp-tempura-8', 'spaghetti-carbonara',
     'special-tea', 'squid-salad', 'surimi-shrimp-roll', 'sweet-sour-chicken', 'tender-sweet-roll', 'teriyaki-vegetables-rice',
     'tobikiri-roll', 'tom-yum-fettuccine', 'tom-yum-roll', 'tom-yum-soup', 'unagi-cheese-roll', 'unagi-uramaki',
     'wasabi-shrimp', 'yasai-roll',
 ]);
 
-export const dishes = menuRows.map(([categoryId, id, name, price, weight = null]) => ({
-    id,
-    categoryId,
-    name,
-    price,
-    weight,
-    image: `/images/menu/${id}.${suppliedPhotoIds.has(id) ? 'jpg' : 'webp'}`,
-}));
+const imageOverrides = new Map([
+    ['california-shrimp-roll', '/images/menu/1.png'],
+    ['premium-tuna-roll', '/images/menu/2.png'],
+    ['chicken-hot-dog-roll', '/images/menu/3.png'],
+    ['shrimp-hot-dog-roll', '/images/menu/4.png'],
+    ['salmon-hot-dog-roll', '/images/menu/5.png'],
+    ['hawaii-chef-roll', '/images/menu/6.png'],
+    ['red-dragon-roll', '/images/menu/7.png'],
+    ['samurai-chef-baked-roll', '/images/menu/8.png'],
+    ['dynamite-baked-roll', '/images/menu/9.png'],
+    ['baked-philadelphia', '/images/menu/10.png'],
+    ['baked-salmon-roll', '/images/menu/11.png'],
+    ['baked-california-roll', '/images/menu/12.png'],
+    ['baked-salmon-roll-2', '/images/menu/13.png'],
+    ['baked-chicken-roll', '/images/menu/14.png'],
+    ['geisha-baked-roll', '/images/menu/15.png'],
+    ['baked-shrimp-roll', '/images/menu/16.png'],
+    ['samurai-set', '/images/menu/17.png'],
+    ['premium-set', '/images/menu/18.png'],
+    ['n2-beef-wok', '/images/menu/19.png'],
+]);
+
+export const dishes = menuRows.map(
+    ([categoryId, id, name, price, weight = null, description = null]) => ({
+        id,
+        categoryId,
+        name,
+        price,
+        weight,
+        description,
+        image: imageOverrides.get(id) ??
+            `/images/menu/${id}.${suppliedPhotoIds.has(id) ? 'jpg' : 'webp'}`,
+    })
+);
 
 export function getDishById(id) {
     return dishes.find((dish) => dish.id === id) || null;
