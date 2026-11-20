@@ -1942,7 +1942,19 @@ a.contact-card:hover {
   line-height: 1.15;
 }
 
-.menu-dish-modal__body > p {
+.menu-dish-modal__composition {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+}
+
+.menu-dish-modal__composition h3 {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.menu-dish-modal__composition p {
   color: var(--text-muted);
   font-size: 15px;
   line-height: 1.7;

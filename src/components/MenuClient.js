@@ -282,7 +282,12 @@ export default function MenuClient() {
                             {categories.find((category) => category.id === selectedDish.categoryId)?.name}
                         </span>
                         <h2 id="menu-dish-modal-title">{selectedDish.name}</h2>
-                        {selectedDish.description && <p>{selectedDish.description}</p>}
+                        {selectedDish.description && (
+                            <div className="menu-dish-modal__composition">
+                                <h3>Состав</h3>
+                                <p>{selectedDish.description}</p>
+                            </div>
+                        )}
                         <div className="menu-dish-modal__meta">
                             <strong>
                                 {formatPrice(selectedDish.price) || 'Цена уточняется'}
